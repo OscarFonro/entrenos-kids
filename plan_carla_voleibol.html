@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plan de verano · Carla</title>
+<style>
+:root{
+  --bg:#1a0b2e; --bg2:#2a1147; --card:#331a55; --accent:#c04bff; --accent2:#22d3c5;
+  --limb:#ffd9b0; --limb2:#e8a86a; --text:#f3eafb; --muted:#c3b0d9;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:linear-gradient(160deg,var(--bg),var(--bg2));color:var(--text);
+  min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:40px}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+header.top{display:flex;align-items:center;gap:12px;padding:6px 2px 14px}
+.top .emoji{font-size:34px;line-height:1}
+.top h1{font-size:20px;margin:0}
+.top .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.progress{background:rgba(255,255,255,.08);border-radius:20px;height:12px;overflow:hidden;margin:2px 0 4px}
+.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width .4s}
+.progtxt{font-size:12px;color:var(--muted);margin-bottom:10px}
+.intro{background:var(--card);border-radius:14px;padding:12px 14px;font-size:13.5px;line-height:1.5;color:var(--text);
+  border-left:4px solid var(--accent);margin-bottom:14px}
+.note{font-size:11.5px;color:var(--muted);line-height:1.5;margin:2px 2px 14px}
+.weekbar{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.weekbar button{flex:0 0 auto;background:var(--card);color:var(--text);border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:7px 12px;font-size:12.5px;cursor:pointer}
+.weekbar button.on{background:var(--accent);color:#111;border-color:var(--accent);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px}
+.chip{position:relative;flex:1 1 62px;min-width:62px;max-width:120px;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:12px;
+  padding:10px 4px;text-align:center;cursor:pointer;transition:transform .1s}
+.chip:active{transform:scale(.96)}
+.chip .s{font-size:11px;color:var(--muted)}
+.chip .num{font-size:18px;font-weight:800}
+.chip.done{border-color:var(--accent2)}
+.chip.done::after{content:"✓";position:absolute;top:4px;right:6px;color:var(--accent2);font-weight:900;font-size:12px}
+.chip.cur{outline:2px solid var(--accent)}
+.session{margin-top:10px}
+.shead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin:6px 2px 4px}
+.shead h2{margin:0;font-size:18px}
+.shead .f{font-size:12.5px;color:var(--muted);margin-top:3px}
+.badge{flex:0 0 auto;background:rgba(255,255,255,.1);border-radius:20px;padding:5px 10px;font-size:11.5px;color:var(--text);white-space:nowrap}
+.secttl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin:16px 2px 8px;font-weight:800}
+.card{background:var(--card);border-radius:16px;padding:12px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+.vid{flex:0 0 92px;width:92px;align-self:stretch;min-height:100px;background:linear-gradient(160deg,var(--accent),var(--accent2));
+  border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  text-decoration:none;color:#111;font-weight:800;font-size:12px;padding:8px;text-align:center;transition:transform .1s}
+.vid:active{transform:scale(.96)}
+.vid .play{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:15px;padding-left:2px}
+.exinfo{flex:1;min-width:0}
+.exinfo .en{font-size:15px;font-weight:700;margin:0 0 2px}
+.exinfo .ef{font-size:11.5px;color:var(--accent2);margin-bottom:6px}
+.exinfo .est{font-size:12.5px;line-height:1.45;color:var(--text);margin-bottom:8px}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.meta span{font-size:11.5px;background:rgba(255,255,255,.08);border-radius:8px;padding:3px 8px}
+.meta .load{background:rgba(255,255,255,.14);font-weight:700}
+.done-btn{display:block;width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;
+  cursor:pointer;margin-top:14px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#111}
+.done-btn.is-done{background:rgba(255,255,255,.12);color:var(--muted)}
+.nav{display:flex;gap:8px;margin-top:10px}
+.nav button{flex:1;padding:11px;border:1px solid rgba(255,255,255,.12);background:var(--card);color:var(--text);
+  border-radius:12px;font-size:13px;cursor:pointer}
+.foot{font-size:11px;color:var(--muted);text-align:center;margin-top:22px;line-height:1.5}
+.eq{font-size:11px;color:var(--muted);margin-top:2px}
+.more{color:var(--accent2);text-decoration:none}
+.coach{margin-top:7px;font-size:11.5px;font-weight:800;color:#111;background:linear-gradient(90deg,var(--accent),var(--accent2));display:inline-block;padding:4px 10px;border-radius:20px}
+.secnote{font-size:12px;color:var(--text);background:rgba(255,255,255,.07);border-left:3px solid var(--accent);border-radius:10px;padding:8px 10px;margin:0 2px 10px;line-height:1.45}
+.vid.novid{font-size:38px;align-items:center;justify-content:center;color:#111}
+
+/* ---------- FIGURA + ANIMACIONES ---------- */
+.figure{overflow:visible}
+.figure *{transform-box:view-box}
+.torso{transform-origin:80px 110px}
+.armF,.armB{transform-origin:80px 60px}
+.foreF,.foreB{transform-origin:80px 85px}
+.legF,.legB{transform-origin:80px 110px}
+.shinF,.shinB{transform-origin:80px 150px}
+.head{transform-origin:80px 60px}
+.fig{transform-origin:80px 150px}
+.stage{transform-origin:80px 120px}
+.ball{opacity:0}
+.limb{stroke-linecap:round}
+
+@keyframes b_jacks_leg{0%,100%{transform:rotate(0)}50%{transform:rotate(18deg)}}
+@keyframes b_jacks_legB{0%,100%{transform:rotate(0)}50%{transform:rotate(-18deg)}}
+@keyframes b_jacks_arm{0%,100%{transform:rotate(0)}50%{transform:rotate(-150deg)}}
+@keyframes b_jacks_body{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.ex-jacks .fig{animation:b_jacks_body 1s infinite ease-in-out}
+.ex-jacks .legF{animation:b_jacks_leg 1s infinite ease-in-out}
+.ex-jacks .legB{animation:b_jacks_legB 1s infinite ease-in-out}
+.ex-jacks .armF{animation:b_jacks_arm 1s infinite ease-in-out}
+.ex-jacks .armB{animation:b_jacks_arm 1s infinite ease-in-out}
+
+@keyframes b_run_f{0%,100%{transform:rotate(28deg)}50%{transform:rotate(-28deg)}}
+@keyframes b_run_b{0%,100%{transform:rotate(-28deg)}50%{transform:rotate(28deg)}}
+@keyframes b_run_shin{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(-70deg)}}
+@keyframes b_run_body{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.ex-run .fig{animation:b_run_body .5s infinite ease-in-out}
+.ex-run .legF{animation:b_run_f .5s infinite ease-in-out}
+.ex-run .legB{animation:b_run_b .5s infinite ease-in-out}
+.ex-run .shinF{animation:b_run_shin .5s infinite ease-in-out}
+.ex-run .armF{animation:b_run_b .5s infinite ease-in-out}
+.ex-run .armB{animation:b_run_f .5s infinite ease-in-out}
+
+@keyframes b_armc_arm{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.ex-armcircles .armF{animation:b_armc_arm 1.6s infinite linear}
+.ex-armcircles .armB{animation:b_armc_arm 1.6s infinite linear}
+
+@keyframes b_legsw{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(35deg)}}
+.ex-legswing .legF{animation:b_legsw 1.4s infinite ease-in-out}
+.ex-legswing .armB{animation:b_legsw 1.4s infinite ease-in-out}
+
+@keyframes b_twist{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(16deg)}}
+.ex-twist .torso{animation:b_twist 1.4s infinite ease-in-out}
+
+@keyframes b_catcow{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-8deg)}}
+.ex-catcow .stage{transform:rotate(90deg)}
+.ex-catcow .torso{animation:b_catcow 2s infinite ease-in-out}
+
+@keyframes b_sq_body{0%,100%{transform:translateY(0)}50%{transform:translateY(16px)}}
+@keyframes b_sq_thigh{0%,100%{transform:rotate(0)}50%{transform:rotate(32deg)}}
+@keyframes b_sq_shin{0%,100%{transform:rotate(0)}50%{transform:rotate(-52deg)}}
+@keyframes b_sq_torso{0%,100%{transform:rotate(0)}50%{transform:rotate(14deg)}}
+@keyframes b_sq_arm{0%,100%{transform:rotate(0)}50%{transform:rotate(-72deg)}}
+.ex-squat .fig{animation:b_sq_body 1.8s infinite ease-in-out}
+.ex-squat .legF,.ex-squat .legB{animation:b_sq_thigh 1.8s infinite ease-in-out}
+.ex-squat .shinF,.ex-squat .shinB{animation:b_sq_shin 1.8s infinite ease-in-out}
+.ex-squat .torso{animation:b_sq_torso 1.8s infinite ease-in-out}
+.ex-squat .armF,.ex-squat .armB{animation:b_sq_arm 1.8s infinite ease-in-out}
+
+@keyframes b_stepup_body{0%,100%{transform:translateY(6px)}50%{transform:translateY(-8px)}}
+@keyframes b_stepup_leg{0%,100%{transform:rotate(0)}50%{transform:rotate(38deg)}}
+@keyframes b_stepup_shin{0%,100%{transform:rotate(0)}50%{transform:rotate(-46deg)}}
+.ex-stepup .fig{animation:b_stepup_body 1.8s infinite ease-in-out}
+.ex-stepup .legF{animation:b_stepup_leg 1.8s infinite ease-in-out}
+.ex-stepup .shinF{animation:b_stepup_shin 1.8s infinite ease-in-out}
+
+@keyframes b_lunge_body{0%,100%{transform:translateY(0)}50%{transform:translateY(16px)}}
+@keyframes b_lunge_f{0%,100%{transform:rotate(0)}50%{transform:rotate(34deg)}}
+@keyframes b_lunge_fs{0%,100%{transform:rotate(0)}50%{transform:rotate(-46deg)}}
+@keyframes b_lunge_b{0%,100%{transform:rotate(0)}50%{transform:rotate(-34deg)}}
+@keyframes b_lunge_bs{0%,100%{transform:rotate(0)}50%{transform:rotate(60deg)}}
+.ex-lunge .fig{animation:b_lunge_body 2s infinite ease-in-out}
+.ex-lunge .legF{animation:b_lunge_f 2s infinite ease-in-out}
+.ex-lunge .shinF{animation:b_lunge_fs 2s infinite ease-in-out}
+.ex-lunge .legB{animation:b_lunge_b 2s infinite ease-in-out}
+.ex-lunge .shinB{animation:b_lunge_bs 2s infinite ease-in-out}
+
+@keyframes b_hinge_torso{0%,100%{transform:rotate(0)}50%{transform:rotate(66deg)}}
+@keyframes b_hinge_leg{0%,100%{transform:rotate(0)}50%{transform:rotate(-10deg)}}
+@keyframes b_hinge_arm{0%,100%{transform:rotate(0)}50%{transform:rotate(-14deg)}}
+.ex-hinge .torso{animation:b_hinge_torso 2s infinite ease-in-out}
+.ex-hinge .legF,.ex-hinge .legB{animation:b_hinge_leg 2s infinite ease-in-out}
+.ex-hinge .armF,.ex-hinge .armB{animation:b_hinge_arm 2s infinite ease-in-out}
+
+@keyframes b_bridge_hip{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(-14deg)}}
+.ex-glutebridge .stage{transform:rotate(90deg)}
+.ex-glutebridge .torso{animation:b_bridge_hip 1.8s infinite ease-in-out}
+.ex-glutebridge .legF,.ex-glutebridge .legB{transform:rotate(120deg)}
+.ex-glutebridge .shinF,.ex-glutebridge .shinB{transform:rotate(-120deg)}
+
+@keyframes b_calf{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.ex-calf .fig{animation:b_calf 1s infinite ease-in-out}
+
+@keyframes b_jump_body{0%,100%{transform:translateY(0)}18%{transform:translateY(16px)}45%{transform:translateY(-34px)}70%{transform:translateY(0)}}
+@keyframes b_jump_thigh{0%,100%{transform:rotate(0)}18%{transform:rotate(34deg)}45%{transform:rotate(0)}}
+@keyframes b_jump_shin{0%,100%{transform:rotate(0)}18%{transform:rotate(-54deg)}45%{transform:rotate(0)}}
+@keyframes b_jump_arm{0%,100%{transform:rotate(0)}18%{transform:rotate(30deg)}45%{transform:rotate(-165deg)}70%{transform:rotate(0)}}
+.ex-jumpup .fig{animation:b_jump_body 1.7s infinite ease-in-out}
+.ex-jumpup .legF,.ex-jumpup .legB{animation:b_jump_thigh 1.7s infinite ease-in-out}
+.ex-jumpup .shinF,.ex-jumpup .shinB{animation:b_jump_shin 1.7s infinite ease-in-out}
+.ex-jumpup .armF,.ex-jumpup .armB{animation:b_jump_arm 1.7s infinite ease-in-out}
+
+@keyframes b_pogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.ex-pogo .fig{animation:b_pogo .42s infinite ease-in-out}
+
+@keyframes b_lat_body{0%{transform:translateX(-16px)}50%{transform:translateX(16px)}100%{transform:translateX(-16px)}}
+@keyframes b_lat_legF{0%{transform:rotate(-14deg)}50%{transform:rotate(14deg)}100%{transform:rotate(-14deg)}}
+.ex-latbound .fig{animation:b_lat_body 1.4s infinite ease-in-out}
+.ex-latbound .legF{animation:b_lat_legF 1.4s infinite ease-in-out}
+.ex-latbound .legB{animation:b_lat_legF 1.4s infinite ease-in-out}
+
+@keyframes b_spike_body{0%,100%{transform:translateY(0)}20%{transform:translateY(14px)}48%{transform:translateY(-34px)}75%{transform:translateY(0)}}
+@keyframes b_spike_arm{0%,100%{transform:rotate(0)}20%{transform:rotate(20deg)}42%{transform:rotate(-170deg)}55%{transform:rotate(-120deg)}75%{transform:rotate(0)}}
+@keyframes b_spike_thigh{0%,100%{transform:rotate(0)}20%{transform:rotate(32deg)}48%{transform:rotate(0)}}
+@keyframes b_spike_shin{0%,100%{transform:rotate(0)}20%{transform:rotate(-50deg)}48%{transform:rotate(0)}}
+.ex-spikejump .fig{animation:b_spike_body 1.9s infinite ease-in-out}
+.ex-spikejump .armF{animation:b_spike_arm 1.9s infinite ease-in-out}
+.ex-spikejump .legF,.ex-spikejump .legB{animation:b_spike_thigh 1.9s infinite ease-in-out}
+.ex-spikejump .shinF,.ex-spikejump .shinB{animation:b_spike_shin 1.9s infinite ease-in-out}
+
+@keyframes b_block_body{0%,100%{transform:translateY(0)}22%{transform:translateY(14px)}50%{transform:translateY(-30px)}75%{transform:translateY(0)}}
+@keyframes b_block_arm{0%,100%{transform:rotate(0)}22%{transform:rotate(20deg)}50%{transform:rotate(-172deg)}75%{transform:rotate(0)}}
+.ex-blockjump .fig{animation:b_block_body 1.8s infinite ease-in-out}
+.ex-blockjump .armF,.ex-blockjump .armB{animation:b_block_arm 1.8s infinite ease-in-out}
+.ex-blockjump .legF,.ex-blockjump .legB{animation:b_jump_thigh 1.8s infinite ease-in-out}
+.ex-blockjump .shinF,.ex-blockjump .shinB{animation:b_jump_shin 1.8s infinite ease-in-out}
+
+@keyframes b_push_arm{0%,100%{transform:rotate(0)}50%{transform:rotate(48deg)}}
+@keyframes b_push_fore{0%,100%{transform:rotate(0)}50%{transform:rotate(-70deg)}}
+@keyframes b_push_body{0%,100%{transform:translateX(0)}50%{transform:translateX(-8px)}}
+.ex-pushup .stage{transform:rotate(90deg)}
+.ex-pushup .fig{animation:b_push_body 1.6s infinite ease-in-out}
+.ex-pushup .armF,.ex-pushup .armB{animation:b_push_arm 1.6s infinite ease-in-out}
+.ex-pushup .foreF,.ex-pushup .foreB{animation:b_push_fore 1.6s infinite ease-in-out}
+.ex-pushup .legF,.ex-pushup .legB,.ex-pushup .torso{transform:rotate(0)}
+
+@keyframes b_press_arm{0%,100%{transform:rotate(-150deg)}50%{transform:rotate(-178deg)}}
+@keyframes b_press_fore{0%,100%{transform:rotate(150deg)}50%{transform:rotate(178deg)}}
+.ex-press .armF,.ex-press .armB{animation:b_press_arm 1.6s infinite ease-in-out}
+.ex-press .foreF,.ex-press .foreB{animation:b_press_fore 1.6s infinite ease-in-out}
+
+@keyframes b_lat_raise{0%,100%{transform:rotate(0)}50%{transform:rotate(-92deg)}}
+.ex-latraise .armF,.ex-latraise .armB{animation:b_lat_raise 1.8s infinite ease-in-out}
+
+@keyframes b_row_arm{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-30deg)}}
+@keyframes b_row_fore{0%,100%{transform:rotate(0)}50%{transform:rotate(-60deg)}}
+.ex-row .stage{transform:rotate(24deg)}
+.ex-row .armF{animation:b_row_arm 1.5s infinite ease-in-out}
+.ex-row .foreF{animation:b_row_fore 1.5s infinite ease-in-out}
+
+@keyframes b_curl{0%,100%{transform:rotate(0)}50%{transform:rotate(-140deg)}}
+.ex-curl .foreF,.ex-curl .foreB{animation:b_curl 1.6s infinite ease-in-out}
+
+@keyframes b_pull_armF{0%,100%{transform:rotate(-84deg)}50%{transform:rotate(-120deg)}}
+@keyframes b_pull_armB{0%,100%{transform:rotate(-84deg)}50%{transform:rotate(-48deg)}}
+.ex-pullapart .armF{animation:b_pull_armF 1.5s infinite ease-in-out}
+.ex-pullapart .armB{animation:b_pull_armB 1.5s infinite ease-in-out}
+.ex-pullapart .foreF{transform:rotate(0)}
+
+@keyframes b_extrot{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-40deg)}}
+.ex-extrot .foreF{animation:b_extrot 1.6s infinite ease-in-out}
+.ex-extrot .armF{transform:rotate(-4deg)}
+
+@keyframes b_throw_arm{0%{transform:rotate(0)}25%{transform:rotate(-155deg)}45%{transform:rotate(50deg)}100%{transform:rotate(0)}}
+@keyframes b_throw_fore{0%{transform:rotate(0)}25%{transform:rotate(-40deg)}45%{transform:rotate(10deg)}100%{transform:rotate(0)}}
+@keyframes b_throw_ball{0%,20%{opacity:1}45%{opacity:1}46%,100%{opacity:0}}
+@keyframes b_throw_torso{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}45%{transform:rotate(12deg)}}
+.ex-throw .armF{animation:b_throw_arm 2.2s infinite ease-in-out}
+.ex-throw .foreF{animation:b_throw_fore 2.2s infinite ease-in-out}
+.ex-throw .ball{animation:b_throw_ball 2.2s infinite}
+.ex-throw .torso{animation:b_throw_torso 2.2s infinite ease-in-out}
+
+@keyframes b_swing_arm{0%,100%{transform:rotate(-30deg)}30%{transform:rotate(-175deg)}55%{transform:rotate(40deg)}}
+.ex-armswing .armF{animation:b_swing_arm 1.8s infinite ease-in-out}
+
+@keyframes b_ytw_arm{0%,100%{transform:rotate(-150deg)}50%{transform:rotate(-120deg)}}
+.ex-ytw .stage{transform:rotate(90deg)}
+.ex-ytw .armF,.ex-ytw .armB{animation:b_ytw_arm 1.8s infinite ease-in-out}
+
+.ex-plank .stage{transform:rotate(90deg)}
+.ex-plank .armF,.ex-plank .armB{transform:rotate(70deg)}
+.ex-plank .foreF,.ex-plank .foreB{transform:rotate(-70deg)}
+@keyframes b_plank_bob{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+.ex-plank .fig{animation:b_plank_bob 2.4s infinite ease-in-out}
+
+.ex-sideplank .stage{transform:rotate(90deg)}
+.ex-sideplank .armF{transform:rotate(80deg)}
+.ex-sideplank .foreF{transform:rotate(-80deg)}
+.ex-sideplank .armB{transform:rotate(-90deg)}
+
+@keyframes b_db_arm{0%,100%{transform:rotate(-150deg)}50%{transform:rotate(-70deg)}}
+@keyframes b_db_leg{0%,100%{transform:rotate(90deg)}50%{transform:rotate(20deg)}}
+.ex-deadbug .stage{transform:rotate(180deg)}
+.ex-deadbug .armF{animation:b_db_arm 1.8s infinite ease-in-out}
+.ex-deadbug .armB{animation:b_db_arm 1.8s infinite ease-in-out .9s}
+.ex-deadbug .legF{animation:b_db_leg 1.8s infinite ease-in-out .9s}
+.ex-deadbug .legB{animation:b_db_leg 1.8s infinite ease-in-out}
+.ex-deadbug .shinF,.ex-deadbug .shinB{transform:rotate(-80deg)}
+
+@keyframes b_bd_arm{0%,100%{transform:rotate(20deg)}50%{transform:rotate(-70deg)}}
+@keyframes b_bd_leg{0%,100%{transform:rotate(20deg)}50%{transform:rotate(100deg)}}
+.ex-birddog .stage{transform:rotate(90deg)}
+.ex-birddog .armF{animation:b_bd_arm 2s infinite ease-in-out}
+.ex-birddog .legB{animation:b_bd_leg 2s infinite ease-in-out}
+.ex-birddog .armB{transform:rotate(80deg)}
+.ex-birddog .foreB{transform:rotate(-80deg)}
+.ex-birddog .legF{transform:rotate(80deg)}
+.ex-birddog .shinF{transform:rotate(-80deg)}
+
+@keyframes b_crunch{0%,100%{transform:rotate(0)}50%{transform:rotate(-26deg)}}
+.ex-crunch .stage{transform:rotate(90deg)}
+.ex-crunch .torso{animation:b_crunch 1.6s infinite ease-in-out}
+.ex-crunch .legF,.ex-crunch .legB{transform:rotate(60deg)}
+.ex-crunch .shinF,.ex-crunch .shinB{transform:rotate(-100deg)}
+.ex-crunch .armF,.ex-crunch .armB{transform:rotate(-30deg)}
+
+@keyframes b_rt{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(22deg)}}
+.ex-rtwist .stage{transform:rotate(30deg)}
+.ex-rtwist .torso{animation:b_rt 1.5s infinite ease-in-out}
+.ex-rtwist .legF,.ex-rtwist .legB{transform:rotate(55deg)}
+.ex-rtwist .shinF,.ex-rtwist .shinB{transform:rotate(-95deg)}
+.ex-rtwist .armF{transform:rotate(-70deg)}
+
+@keyframes b_super{0%,100%{transform:rotate(0)}50%{transform:rotate(-18deg)}}
+@keyframes b_super_leg{0%,100%{transform:rotate(0)}50%{transform:rotate(18deg)}}
+.ex-superman .stage{transform:rotate(-90deg)}
+.ex-superman .armF,.ex-superman .armB{animation:b_super 1.8s infinite ease-in-out}
+.ex-superman .legF,.ex-superman .legB{animation:b_super_leg 1.8s infinite ease-in-out}
+
+@keyframes b_mc_f{0%,100%{transform:rotate(75deg)}50%{transform:rotate(30deg)}}
+@keyframes b_mc_b{0%,100%{transform:rotate(85deg)}50%{transform:rotate(120deg)}}
+.ex-mtnclimber .stage{transform:rotate(90deg)}
+.ex-mtnclimber .armF,.ex-mtnclimber .armB{transform:rotate(70deg)}
+.ex-mtnclimber .foreF,.ex-mtnclimber .foreB{transform:rotate(-70deg)}
+.ex-mtnclimber .legF{animation:b_mc_f .7s infinite ease-in-out}
+.ex-mtnclimber .legB{animation:b_mc_b .7s infinite ease-in-out}
+.ex-mtnclimber .shinF,.ex-mtnclimber .shinB{transform:rotate(-40deg)}
+
+@keyframes b_bike_leg{0%{transform:rotate(40deg)}50%{transform:rotate(-40deg)}100%{transform:rotate(40deg)}}
+@keyframes b_bike_legB{0%{transform:rotate(-40deg)}50%{transform:rotate(40deg)}100%{transform:rotate(-40deg)}}
+.ex-bike .stage{transform:rotate(35deg)}
+.ex-bike .legF{animation:b_bike_leg .6s infinite linear}
+.ex-bike .legB{animation:b_bike_legB .6s infinite linear}
+.ex-bike .shinF,.ex-bike .shinB{transform:rotate(-30deg)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="emoji">🏐</div>
+    <div>
+      <h1>Plan de verano de Carla</h1>
+      <div class="sub">Voleibol · 13 años · 6 semanas · sube de 2 a 5 sesiones/semana</div>
+    </div>
+  </header>
+
+  <div class="progress"><i id="bar"></i></div>
+  <div class="progtxt" id="progtxt"></div>
+
+  <div class="weekbar" id="weekbar"></div>
+  <div class="chips" id="chips"></div>
+
+  <div class="session" id="session"></div>
+
+  <div class="nav">
+    <button id="prev">← Sesión anterior</button>
+    <button id="next">Sesión siguiente →</button>
+  </div>
+
+  <div class="foot">
+    Toca «Ver vídeo» en cada ejercicio para abrir una demostración en YouTube.<br>
+    Cargas orientativas: siempre técnica primero, sin llegar al fallo y sin dolor. Calienta antes y estira después.
+    Si algo molesta, para. Ante dudas, consulta con su entrenador/a o pediatra.<br>
+    Progreso guardado en este dispositivo/navegador.
+    <br><button id="reset" style="margin-top:10px;background:none;border:1px solid rgba(255,255,255,.2);color:var(--muted);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:11px">Reiniciar progreso</button>
+  </div>
+</div>
+
+<script>
+const EX = {"jacks": {"n": "Jumping jacks", "f": "Todo el cuerpo · activar", "eq": "Sin material", "a": "jacks", "st": "Salta abriendo y cerrando piernas mientras subes y bajas los brazos. Ritmo cómodo.", "load": "Sin peso", "q": "jumping jacks como hacer", "yt": "AZrdA3QNJdU"}, "highknees": {"n": "Rodillas arriba", "f": "Piernas · corazón", "eq": "Sin material", "a": "run", "st": "Corre en el sitio subiendo las rodillas a la altura de la cadera. Brazos activos.", "load": "Sin peso", "q": "skipping rodillas arriba ejercicio", "yt": "02ZRXsZeHLg"}, "armcircles": {"n": "Círculos de brazos", "f": "Hombros · movilidad", "eq": "Sin material", "a": "armcircles", "st": "Brazos en cruz, haz círculos pequeños que van creciendo. Adelante y atrás.", "load": "Sin peso", "q": "circulos de brazos calentamiento hombro", "yt": "YTueIW_xapc"}, "legswing": {"n": "Balanceo de pierna", "f": "Cadera · movilidad", "eq": "Apóyate en pared", "a": "legswing", "st": "Balancea una pierna adelante y atrás, relajada. Cambia de pierna.", "load": "Sin peso", "q": "balanceo de pierna movilidad cadera", "yt": "KJKoCnhMrYQ"}, "torsotwist": {"n": "Giros de tronco", "f": "Core · movilidad", "eq": "Sin material", "a": "twist", "st": "Pies separados, gira el tronco de lado a lado dejando que los brazos sigan.", "load": "Sin peso", "q": "giros de tronco calentamiento", "yt": "ydaP3YWsuIo"}, "lungetwist": {"n": "Zancada con giro", "f": "Piernas + core · movilidad", "eq": "Esterilla", "a": "lunge", "st": "Da un paso largo, baja y gira el tronco hacia la pierna de delante. Alterna.", "load": "Sin peso", "q": "zancada con giro movilidad", "yt": "x65vHS4sd_I"}, "catcow": {"n": "Gato–camello", "f": "Espalda · movilidad", "eq": "Esterilla", "a": "catcow", "st": "A cuatro patas, redondea la espalda y luego arquéala despacio. Respira.", "load": "Sin peso", "q": "gato camello ejercicio espalda movilidad", "yt": "8DN9X_KDrrY"}, "jumprope": {"n": "Comba", "f": "Piernas · coordinación", "eq": "Comba (o imaginaria)", "a": "pogo", "st": "Salta con la comba a un ritmo suave, aterrizajes blandos sobre las puntas.", "load": "Sin peso", "q": "saltar a la comba tecnica principiantes", "yt": "dV7SUQn674s"}, "squat": {"n": "Sentadilla", "f": "Cuádriceps · glúteo", "eq": "Peso corporal", "a": "squat", "st": "Pies al ancho de hombros, baja como si te sentaras atrás, pecho arriba. Sube.", "load": "Peso corporal", "q": "sentadilla tecnica correcta", "yt": "qsAkuNORgmk"}, "gobletsquat": {"n": "Sentadilla goblet", "f": "Cuádriceps · glúteo", "eq": "1 mancuerna", "a": "squat", "st": "Sujeta una mancuerna pegada al pecho con las dos manos y haz la sentadilla.", "load": {"11": "2–4 kg", "13": "4–8 kg"}, "q": "sentadilla goblet con mancuerna tecnica", "yt": "CZ4wpmVsX1k"}, "wallsit": {"n": "Sentadilla isométrica en pared", "f": "Cuádriceps · resistencia", "eq": "Pared", "a": "squat", "st": "Espalda en la pared, baja hasta 90° en rodillas y aguanta la posición.", "load": "Peso corporal", "q": "sentadilla isometrica en la pared", "yt": "Bp78LCnPJ_k"}, "stepup": {"n": "Subidas a step", "f": "Piernas · una pierna", "eq": "Banco/escalón", "a": "stepup", "st": "Sube a un escalón firme con una pierna, baja controlando. Alterna.", "load": {"11": "Peso corporal", "13": "o 2–4 kg"}, "q": "step up subida al cajon ejercicio tecnica", "yt": "jY7t0IYJo5I"}, "lunge": {"n": "Zancadas", "f": "Cuádriceps · glúteo · equilibrio", "eq": "Esterilla", "a": "lunge", "st": "Paso largo hacia delante, baja la rodilla de atrás casi al suelo. Alterna.", "load": {"11": "Peso corporal", "13": "o 2–4 kg"}, "q": "zancadas tecnica correcta", "yt": "9qwJJj1Kwfk"}, "splitsquat": {"n": "Zancada estática", "f": "Piernas · una pierna", "eq": "Esterilla", "a": "lunge", "st": "Un pie delante y otro atrás fijos, baja recto y sube. Todas de un lado, luego cambia.", "load": {"11": "Peso corporal", "13": "o 2–4 kg"}, "q": "zancada estatica split squat tecnica", "yt": "vANhtMW1YLc"}, "rdl": {"n": "Peso muerto rumano", "f": "Isquios · glúteo · espalda", "eq": "Mancuernas o barra", "a": "hinge", "st": "Rodillas un poco flexionadas, baja el peso deslizando por las piernas llevando la cadera atrás. Espalda recta.", "load": {"11": "2–4 kg", "13": "5–10 kg"}, "q": "peso muerto rumano con mancuernas tecnica", "yt": "9j_L1KgpK8Y"}, "goodmorning": {"n": "Buenos días", "f": "Isquios · zona lumbar", "eq": "Sin peso o barra ligera", "a": "hinge", "st": "Manos en la nuca, lleva la cadera atrás bajando el pecho con la espalda recta. Sube.", "load": {"11": "Sin peso", "13": "barra ligera"}, "q": "good morning buenos dias ejercicio tecnica", "yt": "3QTVbkT30E0"}, "glutebridge": {"n": "Puente de glúteo", "f": "Glúteo · core", "eq": "Esterilla", "a": "glutebridge", "st": "Tumbado boca arriba, rodillas dobladas, empuja la cadera arriba apretando el glúteo. Baja.", "load": {"11": "Peso corporal", "13": "o 4–6 kg en la cadera"}, "q": "puente de gluteos ejercicio", "yt": "GpJYbtAgtAk"}, "calfraise": {"n": "Elevación de gemelos", "f": "Gemelos · tobillo", "eq": "Peso corporal", "a": "calf", "st": "De pie, sube sobre las puntas lo máximo y baja despacio. Puedes hacerlo en un escalón.", "load": "Peso corporal", "q": "elevacion de gemelos ejercicio", "yt": "QHX97714Juk"}, "squatjump": {"n": "Sentadilla con salto", "f": "Potencia de piernas", "eq": "Esterilla", "a": "jumpup", "st": "Baja a media sentadilla y salta con fuerza. Aterriza suave doblando rodillas.", "load": "Sin peso · calidad del salto", "q": "sentadilla con salto squat jump tecnica", "yt": "-kbKBjUU-1A"}, "tuckjump": {"n": "Salto con rodillas al pecho", "f": "Potencia · coordinación", "eq": "Esterilla", "a": "jumpup", "st": "Salta hacia arriba llevando las rodillas al pecho. Cae blando y repite.", "load": "Sin peso · calidad del salto", "q": "tuck jump salto rodillas al pecho", "yt": "5aUboqWesEc"}, "broadjump": {"n": "Salto horizontal", "f": "Potencia · aterrizaje", "eq": "Espacio libre", "a": "jumpup", "st": "Salta hacia delante lo máximo con los dos pies y aterriza firme y equilibrado.", "load": "Sin peso · calidad del salto", "q": "salto horizontal broad jump tecnica", "yt": "CJvChSADmmI"}, "pogo": {"n": "Saltos de tobillo (pogo)", "f": "Tobillo · reactividad", "eq": "Sin material", "a": "pogo", "st": "Saltitos rápidos con piernas casi rectas, empujando con el tobillo. Contacto corto.", "load": "Sin peso", "q": "pogo jumps saltos de tobillo pliometria", "yt": "1eSXxyBJYXY"}, "lateralbound": {"n": "Saltos laterales", "f": "Potencia lateral · equilibrio", "eq": "Sin material", "a": "latbound", "st": "Salta de lado apoyando en una pierna, aguanta el equilibrio y salta al otro lado.", "load": "Sin peso · calidad del salto", "q": "saltos laterales skater pliometria", "yt": "LyRRekZLJPw"}, "spikejump": {"n": "Salto de remate", "f": "Salto vertical + brazo (remate)", "eq": "Sin material", "a": "spikejump", "st": "Dos-tres pasos de aproximación, salta alto llevando los dos brazos arriba y golpea como en el remate.", "load": "Sin peso · calidad del salto", "q": "tecnica salto de remate voleibol aproximacion", "yt": "murEijLsSNI"}, "blockjump": {"n": "Salto de bloqueo", "f": "Salto vertical · brazos arriba", "eq": "Sin material (o pared)", "a": "blockjump", "st": "Desde flexión de rodillas, salta con los dos brazos estirados arriba como para bloquear. Aterriza suave.", "load": "Sin peso · calidad del salto", "q": "tecnica salto de bloqueo voleibol", "yt": "ArMbk_pys1I"}, "pushup": {"n": "Flexiones", "f": "Pecho · hombro · tríceps", "eq": "Esterilla", "a": "pushup", "st": "Manos bajo los hombros, baja el pecho con el cuerpo recto y empuja. Si cuesta, apoya rodillas.", "load": "Peso corporal", "q": "flexiones tecnica correcta", "yt": "hbGR_wq7wzo"}, "shoulderpress": {"n": "Press de hombro", "f": "Hombros · tríceps", "eq": "Mancuernas", "a": "press", "st": "De pie, mancuernas a la altura de los hombros, empuja arriba sin arquear la espalda. Baja controlando.", "load": {"11": "1–3 kg", "13": "2–5 kg"}, "q": "press de hombro con mancuernas tecnica", "yt": "WeCyPErNDxo"}, "lateralraise": {"n": "Elevaciones laterales", "f": "Hombros", "eq": "Mancuernas o banda", "a": "latraise", "st": "Brazos a los lados, súbelos en cruz hasta la altura de los hombros. Baja despacio.", "load": {"11": "1–2 kg", "13": "1–3 kg"}, "q": "elevaciones laterales hombro mancuernas", "yt": "aVa9ce3SlSA"}, "row": {"n": "Remo con mancuerna", "f": "Espalda · bíceps", "eq": "Mancuerna + banco", "a": "row", "st": "Apoya una mano y rodilla en un banco, tira de la mancuerna hacia la cadera. Alterna lado.", "load": {"11": "2–4 kg", "13": "3–6 kg"}, "q": "remo con mancuerna a una mano tecnica", "yt": "ryhxLQUn-cQ"}, "bandpullapart": {"n": "Aperturas con banda", "f": "Espalda alta · postura", "eq": "Banda elástica", "a": "pullapart", "st": "Banda estirada delante a la altura del pecho, ábrela llevando las manos a los lados. Aprieta escápulas.", "load": "Banda ligera", "q": "band pull apart aperturas con banda elastica", "yt": "itnh6U4IuZs"}, "bandexternalrotation": {"n": "Rotación externa con banda", "f": "Manguito rotador (¡clave para lanzar/rematar!)", "eq": "Banda elástica", "a": "extrot", "st": "Codo pegado al costado en 90°, gira el antebrazo hacia fuera contra la banda. Despacio.", "load": "Banda ligera", "q": "rotacion externa hombro con banda manguito rotador", "yt": "wQdfeB80fqo"}, "ytw": {"n": "Y–T–W de hombro", "f": "Hombro · escápula", "eq": "Esterilla (o mancuernas 0.5-1kg)", "a": "ytw", "st": "Boca abajo, sube los brazos formando una Y, luego T, luego W. Pulgares arriba.", "load": {"11": "Sin peso", "13": "0,5–1 kg"}, "q": "ejercicio Y T W hombro escapula", "yt": "dF04JcSoYkc"}, "overheadthrow": {"n": "Lanzamiento por encima", "f": "Hombro · core · patrón de tiro", "eq": "Balón medicinal ligero", "a": "throw", "st": "De pie, lleva el balón detrás de la cabeza y lánzalo hacia delante/al suelo con todo el cuerpo.", "load": "Balón 0,5–1 kg", "q": "lanzamiento balon medicinal por encima de la cabeza", "yt": "KXLkdUWu8ow"}, "serverarmswing": {"n": "Armado de brazo (saque/remate)", "f": "Hombro · técnica", "eq": "Banda o sin peso", "a": "armswing", "st": "Simula el golpeo de saque/remate: arma el brazo atrás-arriba y golpea adelante. Controla el hombro.", "load": "Sin peso o banda ligera", "q": "tecnica de brazo remate y saque voleibol"}, "bicepcurl": {"n": "Curl de bíceps", "f": "Bíceps", "eq": "Mancuernas", "a": "curl", "st": "Codos pegados al cuerpo, sube las mancuernas girando la palma. Baja despacio.", "load": {"11": "1–3 kg", "13": "2–4 kg"}, "q": "curl de biceps con mancuernas tecnica", "yt": "RsHskJ9k_p0"}, "tricepext": {"n": "Extensión de tríceps", "f": "Tríceps", "eq": "1 mancuerna", "a": "press", "st": "Mancuerna detrás de la cabeza con las dos manos, estira los codos arriba y baja.", "load": {"11": "1–2 kg", "13": "1–3 kg"}, "q": "extension de triceps con mancuerna sobre la cabeza", "yt": "9HAE4LZlq2U"}, "kneepushup": {"n": "Flexiones de rodillas", "f": "Pecho · hombro · tríceps (versión fácil)", "eq": "Esterilla", "a": "pushup", "st": "Como las flexiones pero apoyando las rodillas en el suelo. Baja el pecho con el cuerpo recto y empuja.", "load": "Peso corporal", "q": "flexiones de rodillas principiantes tecnica", "yt": "mts3mYLwaqI"}, "invertedrow": {"n": "Remo invertido (mesa/banda)", "f": "Espalda · bíceps", "eq": "Mesa resistente o banda/TRX", "a": "row", "st": "Túmbate bajo una mesa firme, agárrate al borde y tira del pecho hacia arriba con el cuerpo recto. También vale con banda anclada.", "load": "Peso corporal", "q": "remo invertido en mesa fila australiana casa", "yt": "cczgGh3YdWE"}, "plank": {"n": "Plancha", "f": "Core completo", "eq": "Esterilla", "a": "plank", "st": "Apóyate en antebrazos y puntas, cuerpo recto como una tabla. Aguanta sin bajar la cadera.", "load": "Peso corporal", "q": "plancha abdominal tecnica", "yt": "d0atctiI7Vw"}, "sideplank": {"n": "Plancha lateral", "f": "Oblicuos · core", "eq": "Esterilla", "a": "sideplank", "st": "De lado, apoya un antebrazo y sube la cadera. Aguanta y cambia de lado.", "load": "Peso corporal", "q": "plancha lateral tecnica", "yt": "kyOeSuh7LLo"}, "deadbug": {"n": "Bicho muerto", "f": "Core · coordinación", "eq": "Esterilla", "a": "deadbug", "st": "Boca arriba, brazos y rodillas arriba. Estira brazo y pierna contrarios y vuelve. Alterna.", "load": "Peso corporal", "q": "dead bug bicho muerto ejercicio core", "yt": "0qumyQw0IZg"}, "birddog": {"n": "Bird-dog", "f": "Core · espalda · equilibrio", "eq": "Esterilla", "a": "birddog", "st": "A cuatro patas, estira brazo y pierna contrarios a la vez sin mover la cadera. Alterna.", "load": "Peso corporal", "q": "bird dog ejercicio tecnica core", "yt": "hVrAuwakp84"}, "crunch": {"n": "Encogimientos", "f": "Abdominal", "eq": "Esterilla", "a": "crunch", "st": "Boca arriba, rodillas dobladas, sube los hombros llevando las costillas a la cadera. Baja controlando.", "load": "Peso corporal", "q": "encogimientos abdominales crunch tecnica", "yt": "hl9Yu7UZqHU"}, "russiantwist": {"n": "Giros rusos", "f": "Oblicuos", "eq": "Esterilla (o mancuerna ligera)", "a": "rtwist", "st": "Sentado, tronco algo atrás, gira tocando el suelo a cada lado. Controla, no vayas a lo loco.", "load": {"11": "Sin peso", "13": "o 1–2 kg"}, "q": "giros rusos russian twist ejercicio", "yt": "hdSyLWfRJHc"}, "superman": {"n": "Superman", "f": "Zona lumbar · glúteo", "eq": "Esterilla", "a": "superman", "st": "Boca abajo, sube a la vez brazos y piernas unos centímetros. Aguanta un momento y baja.", "load": "Peso corporal", "q": "superman ejercicio lumbar espalda", "yt": "vxaPBQdVaQg"}, "hollow": {"n": "Hollow hold", "f": "Core anterior", "eq": "Esterilla", "a": "crunch", "st": "Boca arriba, brazos estirados atrás, sube hombros y piernas formando una banana. Aguanta.", "load": "Peso corporal", "q": "hollow hold ejercicio core", "yt": "STv31k-AMg8"}, "mtnclimber": {"n": "Escaladores", "f": "Core · corazón", "eq": "Esterilla", "a": "mtnclimber", "st": "En posición de plancha alta, lleva las rodillas al pecho alternando rápido pero controlado.", "load": "Peso corporal", "q": "mountain climbers escaladores tecnica", "yt": "SMs2N1_ce7g"}, "run": {"n": "Carrera por intervalos", "f": "Corazón · piernas", "eq": "Exterior o cinta", "a": "run", "st": "Alterna 1 min rápido y 1–2 min suave. Ajusta a cómo te sientas.", "load": "—", "q": "correr por intervalos para principiantes"}, "bike": {"n": "Bici", "f": "Corazón · piernas", "eq": "Bici o estática", "a": "bike", "st": "Pedalea a ritmo alegre; puedes meter subidas cortas más fuertes cada pocos minutos.", "load": "—", "q": "entrenamiento en bici por intervalos", "yt": "orvBHhuvfOg"}, "shuttle": {"n": "Ida y vuelta (agilidad)", "f": "Aceleración · cambio de dirección", "eq": "2 marcas separadas 5–10 m", "a": "latbound", "st": "Corre de una marca a otra, toca el suelo y vuelve. Arranques y frenadas rápidas.", "load": "Sin peso", "q": "ejercicio de agilidad ida y vuelta shuttle run", "yt": "FTdYzG2j_Qo"}, "lateralshuffle": {"n": "Desplazamiento lateral", "f": "Movimiento lateral (¡voley!)", "eq": "Espacio libre", "a": "latbound", "st": "Desplázate de lado en posición baja sin cruzar los pies, de una marca a otra.", "load": "Sin peso", "q": "desplazamiento lateral defensa voleibol tecnica", "yt": "jGFf314IxHo"}, "swim": {"n": "Natación", "f": "Corazón · cuerpo completo", "eq": "Piscina", "a": "run", "novideo": true, "icon": "🏊", "st": "Nada a ritmo suave-medio 20–30 min. Alterna estilos si sabes. Opción de resistencia que sugiere el entrenador.", "load": "—", "q": "Natación ejercicio tecnica"}, "playsport": {"n": "Partido con amigos", "f": "Resistencia · diversión", "eq": "—", "a": "run", "novideo": true, "icon": "⚽", "st": "Fútbol, pádel, baloncesto… lo que apetezca. Cuenta como sesión de resistencia y se pasa mejor. (Lo sugiere el entrenador.)", "load": "—", "q": "Partido con amigos ejercicio tecnica"}, "mobham": {"n": "Estiramiento isquios", "f": "Parte de atrás de la pierna", "eq": "Esterilla", "a": "hinge", "st": "Sentado o de pie, lleva el pecho hacia la pierna estirada sin forzar. Respira 20–30 s.", "load": "Suave", "q": "estiramiento isquiotibiales", "yt": "t19U1wN2mHE"}, "mobhip": {"n": "Estiramiento de cadera", "f": "Cadera · glúteo", "eq": "Esterilla", "a": "lunge", "st": "En zancada baja, empuja la cadera adelante notando el estiramiento del muslo. Cambia lado.", "load": "Suave", "q": "estiramiento flexor de cadera", "yt": "xOPxtKzFzzk"}, "mobshoulder": {"n": "Estiramiento de hombro", "f": "Hombro · brazo", "eq": "Sin material", "a": "armcircles", "st": "Cruza un brazo por delante y tira con el otro suavemente. Cambia. Aguanta 20–30 s.", "load": "Suave", "q": "estiramiento de hombro", "yt": "dOmT0JCuTZg"}, "breathing": {"n": "Respiración y calma", "f": "Recuperación", "eq": "Esterilla", "a": "catcow", "st": "Tumbado, respira hondo por la nariz y suelta por la boca. 5–8 respiraciones lentas.", "load": "—", "q": "respiracion diafragmatica relajacion", "yt": "eP3VHiqmelc"}};
+const CFG = {"athlete": "Carla", "age": 13, "sport": "Voleibol", "emoji": "🏐", "theme": {"bg": "#1a0b2e", "bg2": "#2a1147", "card": "#331a55", "accent": "#c04bff", "accent2": "#22d3c5", "limb": "#ffd9b0", "limb2": "#e8a86a", "text": "#f3eafb", "muted": "#c3b0d9"}, "intro": "Vienes de unas colonias con bastante entreno hace 10-12 días, así que arrancas con algo de base. Aun así subimos poco a poco, priorizando el salto de calidad y unos hombros y tobillos fuertes.", "sessions": [{"id": 1, "week": 0, "weekLabel": "Semana 1 · Base", "title": "Piernas + Salto (remate/bloqueo)", "focus": "Fuerza de piernas y salto vertical", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "jacks", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "highknees", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "squat", "sets": 2, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "splitsquat", "sets": 2, "reps": "10–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str"}, {"ex": "goodmorning", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "barra ligera", "cat": "str2"}, {"ex": "tuckjump", "sets": 2, "reps": "5 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "calfraise", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str2"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobham", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 2, "week": 0, "weekLabel": "Semana 1 · Base", "title": "Tren superior + Remate/Saque", "focus": "Hombro sano y potencia de brazo", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "highknees", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "armcircles", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "pushup", "sets": 2, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "shoulderpress", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "2–5 kg", "cat": "str2"}, {"ex": "row", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "3–6 kg", "cat": "str2"}, {"ex": "ytw", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "0,5–1 kg", "cat": "str2"}, {"ex": "serverarmswing", "sets": 2, "reps": "5 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso o banda ligera", "cat": "plyo"}, {"ex": "plank", "sets": 2, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 3, "week": 1, "weekLabel": "Semana 2 · Base", "title": "Cardio + Agilidad lateral", "focus": "Fondo y desplazamientos de voley", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "lungetwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "pogo", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "bike", "sets": 1, "reps": "12–20 min", "rest": "según intervalo", "load": "—", "cat": "cardio"}, {"ex": "lateralbound", "sets": 3, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "blockjump", "sets": 3, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "crunch", "sets": 3, "reps": "25–45 s", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_t"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}, {"ex": "breathing", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "—", "cat": "mob"}]}]}, {"id": 4, "week": 1, "weekLabel": "Semana 2 · Base", "title": "Fuerza global + Core", "focus": "Cuerpo completo y estabilidad", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "pogo", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "catcow", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "squat", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "rdl", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "5–10 kg", "cat": "str2"}, {"ex": "pushup", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "row", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "3–6 kg", "cat": "str2"}, {"ex": "hollow", "sets": 3, "reps": "25–45 s", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_t"}, {"ex": "deadbug", "sets": 3, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "breathing", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "—", "cat": "mob"}, {"ex": "mobham", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 5, "week": 2, "weekLabel": "Semana 3 · Construir", "title": "Salto + Movilidad + Tobillo", "focus": "Salto de calidad, aterrizaje y tobillos fuertes", "dur": "35–40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "armcircles", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "legswing", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "broadjump", "sets": 3, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "tuckjump", "sets": 3, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "calfraise", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str2"}, {"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}, {"ex": "birddog", "sets": 3, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 6, "week": 2, "weekLabel": "Semana 3 · Construir", "title": "Piernas + Salto (remate/bloqueo)", "focus": "Fuerza de piernas y salto vertical", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "pogo", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "catcow", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "wallsit", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "splitsquat", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str"}, {"ex": "glutebridge", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "o 4–6 kg en la cadera", "cat": "str2"}, {"ex": "blockjump", "sets": 3, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "calfraise", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str2"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}]}]}, {"id": 7, "week": 2, "weekLabel": "Semana 3 · Construir", "title": "Tren superior + Remate/Saque", "focus": "Hombro sano y potencia de brazo", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "catcow", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "jacks", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "pushup", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "shoulderpress", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "2–5 kg", "cat": "str2"}, {"ex": "row", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "3–6 kg", "cat": "str2"}, {"ex": "ytw", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "0,5–1 kg", "cat": "str2"}, {"ex": "serverarmswing", "sets": 3, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso o banda ligera", "cat": "plyo"}, {"ex": "mtnclimber", "sets": 3, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}, {"ex": "breathing", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "—", "cat": "mob"}]}]}, {"id": 8, "week": 3, "weekLabel": "Semana 4 · Construir", "title": "Cardio + Agilidad lateral", "focus": "Fondo y desplazamientos de voley", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "legswing", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "torsotwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "run", "sets": 1, "reps": "12–20 min", "rest": "según intervalo", "load": "—", "cat": "cardio"}, {"ex": "shuttle", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso", "cat": "plyo"}, {"ex": "blockjump", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "plank", "sets": 3, "reps": "25–45 s", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_t"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobham", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 9, "week": 3, "weekLabel": "Semana 4 · Construir", "title": "Fuerza global + Core", "focus": "Cuerpo completo y estabilidad", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "torsotwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "lungetwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "gobletsquat", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "4–8 kg", "cat": "str"}, {"ex": "rdl", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "5–10 kg", "cat": "str2"}, {"ex": "pushup", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "row", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "3–6 kg", "cat": "str2"}, {"ex": "sideplank", "sets": 3, "reps": "25–45 s", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_t"}, {"ex": "superman", "sets": 3, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 10, "week": 3, "weekLabel": "Semana 4 · Construir", "title": "Salto + Movilidad + Tobillo", "focus": "Salto de calidad, aterrizaje y tobillos fuertes", "dur": "35–40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "lungetwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "pogo", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "lateralbound", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "squatjump", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "splitsquat", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str2"}, {"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "deadbug", "sets": 3, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}]}]}, {"id": 11, "week": 3, "weekLabel": "Semana 4 · Construir", "title": "Piernas + Salto (remate/bloqueo)", "focus": "Fuerza de piernas y salto vertical", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "highknees", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "armcircles", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "stepup", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str"}, {"ex": "lunge", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str"}, {"ex": "goodmorning", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "barra ligera", "cat": "str2"}, {"ex": "squatjump", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "lateralbound", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "Sin peso · calidad del salto", "cat": "str2"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}, {"ex": "breathing", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "—", "cat": "mob"}]}]}, {"id": 12, "week": 4, "weekLabel": "Semana 5 · Pico", "title": "Tren superior + Remate/Saque", "focus": "Hombro sano y potencia de brazo", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "lungetwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "pogo", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "pushup", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "shoulderpress", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "2–5 kg", "cat": "str2"}, {"ex": "row", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "3–6 kg", "cat": "str2"}, {"ex": "ytw", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "0,5–1 kg", "cat": "str2"}, {"ex": "serverarmswing", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso o banda ligera", "cat": "plyo"}, {"ex": "russiantwist", "sets": 3, "reps": "10–12 / lado", "rest": "30–45 s", "load": "o 1–2 kg", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobham", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 13, "week": 4, "weekLabel": "Semana 5 · Pico", "title": "Cardio + Agilidad lateral", "focus": "Fondo y desplazamientos de voley", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "pogo", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "catcow", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "bike", "sets": 1, "reps": "12–20 min", "rest": "según intervalo", "load": "—", "cat": "cardio"}, {"ex": "lateralbound", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "pogo", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso", "cat": "plyo"}, {"ex": "crunch", "sets": 3, "reps": "25–45 s", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_t"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 14, "week": 4, "weekLabel": "Semana 5 · Pico", "title": "Fuerza global + Core", "focus": "Cuerpo completo y estabilidad", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "catcow", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "jacks", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "squat", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "glutebridge", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "o 4–6 kg en la cadera", "cat": "str2"}, {"ex": "pushup", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "shoulderpress", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "2–5 kg", "cat": "str2"}, {"ex": "hollow", "sets": 3, "reps": "25–45 s", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_t"}, {"ex": "deadbug", "sets": 3, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}]}]}, {"id": 15, "week": 4, "weekLabel": "Semana 5 · Pico", "title": "Salto + Movilidad + Tobillo", "focus": "Salto de calidad, aterrizaje y tobillos fuertes", "dur": "35–40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "jacks", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "highknees", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "spikejump", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "tuckjump", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "calfraise", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str2"}, {"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "birddog", "sets": 3, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}, {"ex": "breathing", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "—", "cat": "mob"}]}]}, {"id": 16, "week": 4, "weekLabel": "Semana 5 · Pico", "title": "Piernas + Salto (remate/bloqueo)", "focus": "Fuerza de piernas y salto vertical", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "torsotwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "lungetwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "squat", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "splitsquat", "sets": 3, "reps": "10–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str"}, {"ex": "rdl", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "5–10 kg", "cat": "str2"}, {"ex": "tuckjump", "sets": 3, "reps": "8 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "calfraise", "sets": 3, "reps": "8–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str2"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "breathing", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "—", "cat": "mob"}, {"ex": "mobham", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 17, "week": 5, "weekLabel": "Semana 6 · Descarga/mantener", "title": "Tren superior + Remate/Saque", "focus": "Hombro sano y potencia de brazo", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "jacks", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "highknees", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "pushup", "sets": 2, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "shoulderpress", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "2–5 kg", "cat": "str2"}, {"ex": "bandpullapart", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "Banda ligera", "cat": "str2"}, {"ex": "bandexternalrotation", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "Banda ligera", "cat": "str2"}, {"ex": "overheadthrow", "sets": 2, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Balón 0,5–1 kg", "cat": "plyo"}, {"ex": "mtnclimber", "sets": 2, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 18, "week": 5, "weekLabel": "Semana 6 · Descarga/mantener", "title": "Cardio + Agilidad lateral", "focus": "Fondo y desplazamientos de voley", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "highknees", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "armcircles", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "swim", "sets": 1, "reps": "12–20 min", "rest": "según intervalo", "load": "—", "cat": "cardio"}, {"ex": "lateralshuffle", "sets": 2, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso", "cat": "plyo"}, {"ex": "blockjump", "sets": 2, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "sideplank", "sets": 2, "reps": "25–45 s", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_t"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobshoulder", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}]}]}, {"id": 19, "week": 5, "weekLabel": "Semana 6 · Descarga/mantener", "title": "Fuerza global + Core", "focus": "Cuerpo completo y estabilidad", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "armcircles", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "legswing", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "stepup", "sets": 2, "reps": "10–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str"}, {"ex": "rdl", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "5–10 kg", "cat": "str2"}, {"ex": "pushup", "sets": 2, "reps": "10–12 reps", "rest": "60–90 s", "load": "Peso corporal", "cat": "str"}, {"ex": "row", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "3–6 kg", "cat": "str2"}, {"ex": "plank", "sets": 2, "reps": "25–45 s", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_t"}, {"ex": "birddog", "sets": 2, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}, {"ex": "breathing", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "—", "cat": "mob"}]}]}, {"id": 20, "week": 5, "weekLabel": "Semana 6 · Descarga/mantener", "title": "Salto + Movilidad + Tobillo", "focus": "Salto de calidad, aterrizaje y tobillos fuertes", "dur": "35–40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "legswing", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "torsotwist", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "blockjump", "sets": 2, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "squatjump", "sets": 2, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "splitsquat", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str2"}, {"ex": "catcow", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Sin peso", "cat": "mob"}, {"ex": "deadbug", "sets": 2, "reps": "10–12 / lado", "rest": "30–45 s", "load": "Peso corporal", "cat": "core_r"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "breathing", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "—", "cat": "mob"}, {"ex": "mobham", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}, {"id": 21, "week": 5, "weekLabel": "Semana 6 · Descarga/mantener", "title": "Piernas + Salto (remate/bloqueo)", "focus": "Fuerza de piernas y salto vertical", "dur": "40 min", "sections": [{"name": "Calentamiento", "items": [{"ex": "catcow", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}, {"ex": "jacks", "sets": 1, "reps": "30–45 s", "rest": "—", "load": "Sin peso", "cat": "warm"}]}, {"name": "Principal", "items": [{"ex": "gobletsquat", "sets": 2, "reps": "10–12 reps", "rest": "60–90 s", "load": "4–8 kg", "cat": "str"}, {"ex": "lunge", "sets": 2, "reps": "10–12 reps", "rest": "60–90 s", "load": "o 2–4 kg", "cat": "str"}, {"ex": "glutebridge", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "o 4–6 kg en la cadera", "cat": "str2"}, {"ex": "spikejump", "sets": 2, "reps": "6 saltos", "rest": "60–90 s (recupera bien)", "load": "Sin peso · calidad del salto", "cat": "plyo"}, {"ex": "lateralbound", "sets": 2, "reps": "8–12 reps", "rest": "60–90 s", "load": "Sin peso · calidad del salto", "cat": "str2"}]}, {"name": "Vuelta a la calma", "items": [{"ex": "mobham", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}, {"ex": "mobhip", "sets": 1, "reps": "20–30 s / lado", "rest": "—", "load": "Suave", "cat": "mob"}]}]}]};
+const KEY = "plan_"+CFG.athlete;
+let done = {};
+try{ done = JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ done={}; }
+let curWeek = 0, curIdx = 0;
+
+// figura SVG reutilizable
+function figSVG(animKey){
+  const L="var(--limb)", L2="var(--limb2)", A="var(--accent)";
+  return `<svg class="figure ex-${animKey}" viewBox="0 0 160 210" xmlns="http://www.w3.org/2000/svg">
+    <line x1="30" y1="188" x2="130" y2="188" stroke="rgba(255,255,255,.18)" stroke-width="3"/>
+    <g class="stage"><g class="fig">
+      <g class="legB"><rect x="76" y="110" width="9" height="42" rx="4" fill="${L2}" opacity=".55"/>
+        <g class="shinB"><rect x="76" y="150" width="8" height="38" rx="4" fill="${L2}" opacity=".55"/></g></g>
+      <g class="armB"><rect x="77" y="60" width="7" height="27" rx="3.5" fill="${L2}" opacity=".55"/>
+        <g class="foreB"><rect x="77" y="85" width="7" height="25" rx="3.5" fill="${L2}" opacity=".55"/></g></g>
+      <g class="legF"><rect x="76" y="110" width="9" height="42" rx="4" fill="${L}"/>
+        <g class="shinF"><rect x="76" y="150" width="8" height="38" rx="4" fill="${L}"/>
+          <rect x="72" y="184" width="18" height="7" rx="3" fill="${L}"/></g></g>
+      <g class="torso">
+        <rect x="74" y="58" width="12" height="54" rx="6" fill="${A}"/>
+        <line x1="80" y1="58" x2="80" y2="52" stroke="${L}" stroke-width="4"/>
+        <circle class="head" cx="80" cy="43" r="13" fill="${L}"/>
+        <g class="armF"><rect x="77" y="60" width="7" height="27" rx="3.5" fill="${L}"/>
+          <g class="foreF"><rect x="77" y="85" width="7" height="25" rx="3.5" fill="${L}"/>
+            <circle class="ball" cx="80" cy="114" r="8" fill="${A}"/></g></g>
+      </g>
+    </g></g>
+  </svg>`;
+}
+
+function totalDone(){ return CFG.sessions.filter(s=>done[s.id]).length; }
+
+function renderProgress(){
+  const t = totalDone(), tot = CFG.sessions.length;
+  document.getElementById("bar").style.width = (100*t/tot)+"%";
+  document.getElementById("progtxt").textContent = t+" de "+tot+" sesiones completadas";
+}
+
+function renderWeekbar(){
+  const wb = document.getElementById("weekbar"); wb.innerHTML="";
+  for(let w=0;w<6;w++){
+    const b=document.createElement("button");
+    b.textContent="Sem "+(w+1);
+    if(w===curWeek) b.className="on";
+    b.onclick=()=>{curWeek=w; const first=CFG.sessions.findIndex(s=>s.week===w); curIdx=first; renderAll();};
+    wb.appendChild(b);
+  }
+}
+
+function renderChips(){
+  const c=document.getElementById("chips"); c.innerHTML="";
+  const weekSessions = CFG.sessions.filter(s=>s.week===curWeek);
+  weekSessions.forEach((s)=>{
+    const globalIdx = CFG.sessions.indexOf(s);
+    const d=document.createElement("div");
+    d.className="chip"+(done[s.id]?" done":"")+(globalIdx===curIdx?" cur":"");
+    d.innerHTML=`<div class="s">Sesión</div><div class="num">${s.id}</div>`;
+    d.onclick=()=>{curIdx=globalIdx; renderSession(); renderChips();};
+    c.appendChild(d);
+  });
+}
+
+function itemHTML(it){
+  const ex=EX[it.ex];
+  const meta=[`<span class="load">🏋️ ${it.load}</span>`,
+              `<span>🔁 ${it.sets>1? it.sets+" × ":""}${it.reps}</span>`];
+  if(it.rest && it.rest!=="—") meta.push(`<span>⏱️ descanso ${it.rest}</span>`);
+  const search="https://www.youtube.com/results?search_query="+encodeURIComponent(ex.q||ex.n);
+  const vurl= ex.yt ? ("https://www.youtube.com/watch?v="+ex.yt) : search;
+  const left = ex.novideo
+     ? `<div class="vid novid">${ex.icon||"🏃"}</div>`
+     : `<a class="vid" href="${vurl}" target="_blank" rel="noopener"><span class="play">▶</span><span>Ver vídeo</span></a>`;
+  const eq = ex.novideo
+     ? `<div class="eq">Material: ${ex.eq}</div>`
+     : `<div class="eq">Material: ${ex.eq} · <a class="more" href="${search}" target="_blank" rel="noopener">buscar más vídeos</a></div>`;
+  return `<div class="card">
+    ${left}
+    <div class="exinfo">
+      <div class="en">${ex.n}</div>
+      <div class="ef">${ex.f}</div>
+      <div class="est">${ex.st}</div>
+      <div class="meta">${meta.join("")}</div>
+      ${eq}
+    </div></div>`;
+}
+
+function renderSession(){
+  const s=CFG.sessions[curIdx];
+  const isDone=!!done[s.id];
+  let html=`<div class="shead">
+      <div><h2>Sesión ${s.id} · ${s.title}</h2><div class="f">${s.focus}</div>
+      ${s.coach?'<div class="coach">★ Circuito recomendado por el entrenador</div>':''}</div>
+      <div class="badge">${s.weekLabel.split(" · ")[1]} · ${s.dur}</div>
+    </div>`;
+  s.sections.forEach(sec=>{
+    html+=`<div class="secttl">${sec.name}</div>`;
+    if(sec.note) html+=`<div class="secnote">${sec.note}</div>`;
+    sec.items.forEach(it=> html+=itemHTML(it));
+  });
+  html+=`<button class="done-btn ${isDone?'is-done':''}" id="doneBtn">${isDone?'✓ Sesión completada (toca para desmarcar)':'Marcar sesión como completada'}</button>`;
+  document.getElementById("session").innerHTML=html;
+  document.getElementById("doneBtn").onclick=()=>{
+    if(done[s.id]) delete done[s.id]; else done[s.id]=true;
+    save(); renderProgress(); renderChips(); renderSession();
+  };
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderWeekbar(); renderChips(); renderSession(); renderProgress(); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(done)); }catch(e){} }
+
+document.getElementById("prev").onclick=()=>{ if(curIdx>0){curIdx--; curWeek=CFG.sessions[curIdx].week; renderAll();} };
+document.getElementById("next").onclick=()=>{ if(curIdx<CFG.sessions.length-1){curIdx++; curWeek=CFG.sessions[curIdx].week; renderAll();} };
+document.getElementById("reset").onclick=()=>{ if(confirm("¿Reiniciar todo el progreso?")){ done={}; save(); renderAll(); } };
+
+// abrir en la primera sesión sin completar
+const firstUndone = CFG.sessions.findIndex(s=>!done[s.id]);
+if(firstUndone>=0){ curIdx=firstUndone; curWeek=CFG.sessions[curIdx].week; }
+renderAll();
+</script>
+</body>
+</html>
