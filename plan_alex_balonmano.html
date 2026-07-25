@@ -59,6 +59,7 @@ header.top{display:flex;align-items:center;gap:12px;padding:6px 2px 14px}
 .timer.run{background:var(--accent);color:#111;border-color:var(--accent)}
 .wtrow{font-size:12px;color:var(--muted);margin-top:9px;display:flex;align-items:center;gap:7px}
 .wt{width:66px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:var(--text);border-radius:8px;padding:5px 7px;font-size:13px}
+.meta .tgt{background:var(--accent);color:#111;font-weight:800}
 .confetti-p{position:fixed;width:9px;height:9px;border-radius:2px;pointer-events:none;z-index:9998}
 .cele{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(4,8,20,.80);text-align:center;padding:24px}
 .cele canvas{position:absolute;inset:0;width:100%;height:100%}
@@ -362,6 +363,7 @@ header.top{display:flex;align-items:center;gap:12px;padding:6px 2px 14px}
 
   <div class="foot">
     Toca «Ver vídeo» en cada ejercicio para abrir una demostración en YouTube.<br>
+    🎯 «Hoy» es tu objetivo de peso: apunta el que uses y, al completar el ejercicio, la próxima vez subirá un poco solo. Si un día vas más ligero, se adapta.<br>
     Cargas orientativas: siempre técnica primero, sin llegar al fallo y sin dolor. Calienta antes y estira después.
     Si algo molesta, para. Ante dudas, consulta con su entrenador/a o pediatra.<br>
     Progreso guardado en este dispositivo/navegador.
@@ -375,17 +377,45 @@ const CFG = {"athlete": "Alex", "age": 11, "sport": "Balonmano", "emoji": "🤾"
 const KEY = "plan_"+CFG.athlete;
 const KEYI = "plan_"+CFG.athlete+"_items";
 const KEYW = "plan_"+CFG.athlete+"_weights";
+const KEYS = "plan_"+CFG.athlete+"_sugg";
 let done = {};
 let itemsDone = {};
 let weights = {};
+let sugg = {};
 try{ done = JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ done={}; }
 try{ itemsDone = JSON.parse(localStorage.getItem(KEYI)||"{}"); }catch(e){ itemsDone={}; }
 try{ weights = JSON.parse(localStorage.getItem(KEYW)||"{}"); }catch(e){ weights={}; }
+try{ sugg = JSON.parse(localStorage.getItem(KEYS)||"{}"); }catch(e){ sugg={}; }
 let curWeek = 0, curIdx = 0;
 
 // ---- peso usado ----
 function setWeight(ex,val){ if(val===""||val==null){ delete weights[ex]; } else { weights[ex]=val; }
   try{ localStorage.setItem(KEYW, JSON.stringify(weights)); }catch(e){} }
+
+// ---- progresión automática de carga ----
+function parseKgRange(load){
+  const nums=(String(load).replace(/,/g,".").match(/\d+(?:\.\d+)?/g)||[]).map(Number);
+  if(!nums.length) return null;
+  return {min:nums[0], max:nums[nums.length-1]};
+}
+function round05(x){ return Math.round(x*2)/2; }
+function incFor(ex){ return ["lateralraise","bicepcurl","tricepext"].indexOf(ex)>=0 ? 0.5 : 1; }
+function targetFor(it){
+  if(!/kg/.test(it.load)) return null;
+  const rng=parseKgRange(it.load);
+  return sugg[it.ex]!=null ? sugg[it.ex] : (rng?rng.min:null);
+}
+function bumpProgression(it){
+  if(!/kg/.test(it.load)) return;
+  const rng=parseKgRange(it.load);
+  const cur = sugg[it.ex]!=null ? sugg[it.ex] : (rng?rng.min:0);
+  let used = weights[it.ex]!=null ? parseFloat(String(weights[it.ex]).replace(",",".")) : cur;
+  if(isNaN(used)) used=cur;
+  let nt = used>=cur ? used+incFor(it.ex) : used;       // sube si cumplió; se adapta si fue más ligero
+  if(rng){ nt=Math.min(nt, rng.max*2); nt=Math.max(nt, rng.min); } // topes suaves
+  sugg[it.ex]=round05(nt);
+  try{ localStorage.setItem(KEYS, JSON.stringify(sugg)); }catch(e){}
+}
 
 // ---- tag de objetivo ----
 function goalTag(it){
@@ -506,6 +536,7 @@ function toggleItem(id,si,ii,ev){
   const marking = !itemsDone[id][k];
   if(marking) itemsDone[id][k]=true; else delete itemsDone[id][k];
   if(Object.keys(itemsDone[id]).length===0) delete itemsDone[id];
+  if(marking){ bumpProgression(sById(id).sections[si].items[ii]); }
   const wasDone=!!done[id];
   recomputeSession(id);
   const nowDone=!!done[id];
@@ -519,7 +550,7 @@ function toggleSession(id){
   if(done[id]){ delete done[id]; delete itemsDone[id]; }
   else{
     done[id]=true; const m={};
-    s.sections.forEach((sec,si)=>sec.items.forEach((it,ii)=>{ m[si+"-"+ii]=true; }));
+    s.sections.forEach((sec,si)=>sec.items.forEach((it,ii)=>{ m[si+"-"+ii]=true; bumpProgression(it); }));
     itemsDone[id]=m;
   }
   save(); renderChips(); renderProgress(); renderSession(false);
@@ -589,8 +620,10 @@ function itemHTML(it, sid, si, ii){
   const ex=EX[it.ex];
   const checked = !!(itemsDone[sid] && itemsDone[sid][si+"-"+ii]);
   const sec=parseSeconds(it.reps);
+  const tgt=targetFor(it);
   const meta=[`<span class="load">🏋️ ${it.load}</span>`,
               `<span>🔁 ${it.sets>1? it.sets+" × ":""}${it.reps}</span>`];
+  if(tgt!=null) meta.splice(1,0,`<span class="tgt">🎯 Hoy: ${tgt} kg</span>`);
   if(it.rest && it.rest!=="—") meta.push(`<span>⏱️ descanso ${it.rest}</span>`);
   if(sec>0) meta.push(`<button class="timer" onclick="startTimer(this,${sec})">▶ ${fmt(sec)}</button>`);
   const search="https://www.youtube.com/results?search_query="+encodeURIComponent(ex.q||ex.n);
@@ -602,7 +635,7 @@ function itemHTML(it, sid, si, ii){
      ? `<div class="eq">Material: ${ex.eq}</div>`
      : `<div class="eq">Material: ${ex.eq} · <a class="more" href="${search}" target="_blank" rel="noopener">buscar más vídeos</a></div>`;
   const weighted = /kg/.test(it.load);
-  const wv = (weights[it.ex]!=null? weights[it.ex] : "");
+  const wv = (weights[it.ex]!=null ? weights[it.ex] : (tgt!=null?tgt:""));
   const wtrow = weighted
      ? `<div class="wtrow">⚖️ Peso usado: <input class="wt" type="number" inputmode="decimal" min="0" step="0.5" value="${wv}" placeholder="kg" oninput="setWeight('${it.ex}',this.value)"> kg</div>`
      : ``;
